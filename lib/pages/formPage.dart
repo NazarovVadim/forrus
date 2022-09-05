@@ -41,7 +41,10 @@ class _FormPageState extends State<FormPage> {
             },
           ),
           const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              //color: Color.fromRGBO(244, 198, 6, 1),
+              color: Color.fromRGBO(29, 31, 38, 1),
+            ),
           )
         ],
       ),
