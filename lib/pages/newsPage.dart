@@ -288,7 +288,7 @@ class _NewsPageState extends State<NewsPage> {
                                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                                       ),
                                       TextSpan(
-                                          text: '${NewsFunc.cutString('Я очень горжусь тем фактом, что карточный автомат убил KFC согласно загадочному плану, и у него закончились боеприпасы и еда.')}...\n'
+                                          text: '${NewsFunc.cutString('Я очень горжусь тем фактом, что карточный автомат убил KFC согласно загадочному плану, и у него закончились боеприпасы и еда.', 65)}...\n'
                                         //style: TextStyle(fontSize: 14),
                                       ),
                                       const TextSpan(text: '10 дек 2020')

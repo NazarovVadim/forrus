@@ -4,8 +4,8 @@ import 'dart:async' show Future;
 
 class NewsFunc{
 
-  static cutString (String str){
-    int maxLength = 65;
+  static cutString (String str,int maxLength){
+    //int maxLength = 65;
     String editString = str.substring(0, maxLength);
     if(editString.endsWith(' ')){
       editString.substring(0, editString.length-1);
