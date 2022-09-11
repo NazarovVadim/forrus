@@ -30,6 +30,7 @@ dependencies:
   webview_flutter: ^3.0.4
   flutter_launcher_icons:
   images_picker:
+  http:
   flutter:
     sdk: flutter
 

@@ -37,7 +37,6 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(heroTag);
     return Scaffold(
       appBar: AppBar(
         title: Image.asset('assets/images/forrus.jpg', width: 130,),
@@ -54,7 +53,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
               tag: heroTag,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
+                child: Image.network(
                   picturePath,
                   width: 350,
                   fit: BoxFit.cover,
