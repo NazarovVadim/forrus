@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:http/http.dart' as http;
 
 
@@ -56,15 +54,4 @@ Future<List<News>> fetchNews(bool isTopNews) async {
   return news;
 }
 
-int getTopNewsCount(List<News>? data){
-  int result = 0;
-
-  for(int index = 0; index<data!.length; index++){
-    if(data[index].isTopNews){
-      result++;
-    }
-  }
-
-  return result;
-}
 

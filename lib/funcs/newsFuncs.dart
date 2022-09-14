@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:async' show Future;
 
+import 'getAPI.dart';
+
 class NewsFunc{
 
   static cutString (String str,int maxLength){
@@ -15,5 +17,7 @@ class NewsFunc{
 
   static bool isNewsLoaded = false;
   static bool isSupportLoaded = false;
+  static late Future<List<News>> futureTopNewsLoaded;
+  static late Future<List<News>> futureLatestNewsLoaded;
 }
 

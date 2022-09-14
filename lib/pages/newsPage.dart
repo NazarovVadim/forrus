@@ -16,13 +16,20 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   late Future<List<News>> futureTopNews;
   late Future<List<News>> futureLatestNews;
+  late Future<List<News>> emptyFuture;
 
   @override
   void initState(){
     super.initState();
 
-    futureTopNews = fetchNews(true);
-    futureLatestNews = fetchNews(false);
+    if(!NewsFunc.isNewsLoaded){
+      futureTopNews = fetchNews(true);
+      NewsFunc.futureTopNewsLoaded = futureTopNews;
+      futureLatestNews = fetchNews(false);
+      NewsFunc.futureLatestNewsLoaded = futureLatestNews;
+      NewsFunc.isNewsLoaded = true;
+
+    }
 
   }
 
@@ -30,15 +37,7 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context){
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async{
-            setState((){
-              futureTopNews = fetchNews(true);
-              futureLatestNews = fetchNews(false);
-            });
-          },
-          color: Colors.black,
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +47,7 @@ class _NewsPageState extends State<NewsPage> {
                     child: Container(
                       height: 210,
                       child: FutureBuilder<List<News>>(
-                        future: futureTopNews,
+                        future: NewsFunc.futureTopNewsLoaded,
                         builder: (context, snapshot){
                           if(snapshot.hasData){
                             return ListView.builder(
@@ -174,7 +173,7 @@ class _NewsPageState extends State<NewsPage> {
                   ),
                   SingleChildScrollView(
                     child: FutureBuilder<List<News>>(
-                      future: futureLatestNews,
+                      future: NewsFunc.futureLatestNewsLoaded,
                       builder: (context, snapshot){
                         if(snapshot.hasData){
                           return ListView.builder(
@@ -347,7 +346,6 @@ class _NewsPageState extends State<NewsPage> {
             ),
           ),
         )
-      )
-    );
+      );
   }
 }

@@ -46,7 +46,14 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         backgroundColor: Color.fromRGBO(244, 198, 6, 1),
       ),
-      body: _tabPages[currentTabIndex],
+      body: RefreshIndicator(
+        onRefresh: () async{
+          setState((){
+
+          });
+        },
+        child: _tabPages[currentTabIndex],
+      ),
       bottomNavigationBar: SalomonBottomBar(
         items: _tabIcons,
         currentIndex: currentTabIndex,
