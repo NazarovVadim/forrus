@@ -5,7 +5,6 @@ import 'getAPI.dart';
 class NewsFunc{
 
   static cutString (String str,int maxLength){
-    //int maxLength = 65;
     String editString = str.substring(0, maxLength);
     if(editString.endsWith(' ')){
       editString.substring(0, editString.length-1);

@@ -44,8 +44,8 @@ class _NewsPageState extends State<NewsPage> {
               NewsFunc.futureTopNewsLoaded = futureTopNews;
               futureLatestNews = fetchNews(false);
               NewsFunc.futureLatestNewsLoaded = futureLatestNews;
-              NewsFunc.isNewsContentLoaded = false;
             });
+            print('refreshed');
             return Future<void>.delayed(const Duration(seconds: 2));
           },
           child: SingleChildScrollView(
@@ -62,10 +62,8 @@ class _NewsPageState extends State<NewsPage> {
                         builder: (context, snapshot){
                           if(snapshot.hasData){
                             NewsFunc.isNewsContentLoaded = true;
-                            print( NewsFunc.isNewsContentLoaded);
                           } else{
                             NewsFunc.isNewsContentLoaded = false;
-                            print( NewsFunc.isNewsContentLoaded);
                           }
                           if( NewsFunc.isNewsContentLoaded){
                             return ListView.builder(
@@ -80,11 +78,7 @@ class _NewsPageState extends State<NewsPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => DetailNewsPage(
-                                                title: snapshot.data![index].name,
-                                                describe: snapshot.data![index].text,
-                                                date: snapshot.data![index].date,
-                                                picturePath: snapshot.data![index].pictureUrl,
-                                                heroTag: snapshot.data![index].id,
+                                                id: snapshot.data![index].id,
                                               ),
                                             ),
                                           );
@@ -189,11 +183,15 @@ class _NewsPageState extends State<NewsPage> {
                     padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                     child: Text('Последнее', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                   ),
-                  SingleChildScrollView(
-                    child: FutureBuilder<List<News>>(
+                  FutureBuilder<List<News>>(
                       future: NewsFunc.futureLatestNewsLoaded,
                       builder: (context, snapshot){
                         if(snapshot.hasData){
+                          NewsFunc.isNewsContentLoaded = true;
+                        } else{
+                          NewsFunc.isNewsContentLoaded = false;
+                        }
+                        if(NewsFunc.isNewsContentLoaded){
                           return ListView.builder(
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
@@ -204,55 +202,53 @@ class _NewsPageState extends State<NewsPage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                          title: snapshot.data![index].name,
-                                          describe: snapshot.data![index].text,
-                                          picturePath: snapshot.data![index].pictureUrl,
-                                          date: snapshot.data![index].date,
-                                          heroTag: snapshot.data![index].id,
+                                          id: snapshot.data![index].id,
                                         ),
                                         )
                                     );
                                   },
-                                  child: Row(
-                                    children: [
-                                      const Padding(padding: EdgeInsets.only(left: 10)),
-                                      Hero(
-                                        tag: snapshot.data![index].id,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(15),
-                                          child: Image.network(
-                                            snapshot.data![index].pictureUrl,
-                                            width: 80,
-                                            height: 80,
-                                            fit: BoxFit.cover,
-                                            // color: const Color.fromRGBO(255, 255, 255, 0.5),
-                                            // colorBlendMode: BlendMode.modulate
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 10, left: 10),
+                                    child: Row(
+                                      children: [
+                                        Hero(
+                                          tag: snapshot.data![index].id,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(15),
+                                            child: Image.network(
+                                              snapshot.data![index].pictureUrl,
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                              // color: const Color.fromRGBO(255, 255, 255, 0.5),
+                                              // colorBlendMode: BlendMode.modulate
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const Padding(padding: EdgeInsets.only(right: 10)),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text.rich(
-                                            TextSpan(
-                                                children:[
-                                                  TextSpan(
-                                                    text: snapshot.data![index].name + '\n',
-                                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                                                  ),
-                                                  TextSpan(
-                                                      text: '${NewsFunc.cutString(snapshot.data![index].text, 65)}...\n'
-                                                    //style: TextStyle(fontSize: 14),
-                                                  ),
-                                                  TextSpan(text: snapshot.data![index].date)
-                                                ]
-                                            )
+                                        const Padding(padding: EdgeInsets.only(right: 10)),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text.rich(
+                                              TextSpan(
+                                                  children:[
+                                                    TextSpan(
+                                                      text: snapshot.data![index].name + '\n',
+                                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                                                    ),
+                                                    TextSpan(
+                                                        text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
+                                                      //style: TextStyle(fontSize: 14),
+                                                    ),
+                                                    TextSpan(text: snapshot.data![index].date)
+                                                  ]
+                                              )
+                                          ),
                                         ),
-                                      ),
 
-                                      IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
-                                    ],
-                                  ),
+                                        IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
+                                      ],
+                                    ),
+                                  )
                                 );
                               } else{
                                 return const SizedBox.shrink();
@@ -358,8 +354,6 @@ class _NewsPageState extends State<NewsPage> {
                         }
                       },
                     ),
-                  )
-
                 ]
             ),
           ),

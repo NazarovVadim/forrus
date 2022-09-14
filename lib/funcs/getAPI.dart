@@ -46,10 +46,24 @@ Future<List<News>> fetchNews(bool isTopNews) async {
     } else{
       if(!article.isTopNews) news.add(article);
     }
-
-
-
   }
+  return news;
+}
+
+Future<List<News>> fetchDetailNews(String id) async {
+  var result = await http.get(Uri.parse("http://forrus.incomp.tmweb.ru/api/news/?news_id=${id}"));
+  var jsonData = jsonDecode(result.body);
+  List<News> news = [];
+
+    News article = News(
+        id: jsonData['id'],
+        name: jsonData['name'],
+        text: jsonData['detailText'],
+        pictureUrl: jsonData['detailPicture'],
+        date: jsonData['date'],
+        isTopNews: false
+    );
+    news.add(article);
 
   return news;
 }

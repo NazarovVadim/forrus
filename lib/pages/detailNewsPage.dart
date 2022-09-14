@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 
+import '../funcs/getAPI.dart';
 import '../funcs/newsFuncs.dart';
 
 class DetailNewsPage extends StatefulWidget {
-  final String title;
-  final String describe;
-  final String picturePath;
-  final String date;
-  final String heroTag;
+  final String id;
 
 
-  const DetailNewsPage({Key? key, required this.title, required this.describe, required this.picturePath, required this.date, required this.heroTag}) : super(key: key);
+  const DetailNewsPage({Key? key, required this.id}) : super(key: key);
 
 
   @override
@@ -18,20 +16,13 @@ class DetailNewsPage extends StatefulWidget {
 }
 
 class _DetailNewsPageState extends State<DetailNewsPage> {
-  late final String title;
-  late final String describe;
-  late final String picturePath;
-  late final String date;
-  late final String heroTag;
-
+  late final String id;
+  late Future<List<News>> futureDetail;
   @override
   void initState(){
     super.initState();
-    title = widget.title;
-    describe = widget.describe;
-    picturePath = widget.picturePath;
-    date = widget.date;
-    heroTag = widget.heroTag;
+    id = widget.id;
+    futureDetail = fetchDetailNews(id);
   }
 
 
@@ -43,56 +34,124 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(244, 198, 6, 1),
       ),
-      body: Align(
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 30)),
-            Hero(
-              tag: heroTag,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  picturePath,
-                  width: 350,
-                  fit: BoxFit.cover,
-                  // color: const Color.fromRGBO(255, 255, 255, 0.5),
-                  // colorBlendMode: BlendMode.modulate
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Container(
-                width: 350,
-                child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 26),),
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Text(date, style: const TextStyle(color: Colors.grey, fontSize: 16),),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Container(
-                width: 350,
-                child: Text.rich(
-                    TextSpan(
-                        children:[
-                          TextSpan(
-                            text: describe,
-                            style: TextStyle(fontSize: 18),
+      body: SingleChildScrollView(
+            child: FutureBuilder<List<News>>(
+              future: futureDetail,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(padding: EdgeInsets.only(top: 30)),
+                      Hero(
+                        tag: id,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            snapshot.data![0].pictureUrl,
+                            width: 350,
+                            fit: BoxFit.cover,
+                            // color: const Color.fromRGBO(255, 255, 255, 0.5),
+                            // colorBlendMode: BlendMode.modulate
                           ),
-                        ]
-                    )
-                ),
-              )
-            )
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 30, left: 30),
+                          child: Container(
+                            width: double.infinity,
+                            child: Text(snapshot.data![0].name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 26),),
+                          )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, left: 30),
+                        child: Container(
+                          width: double.infinity,
+                          child: Text(snapshot.data![0].date, style: const TextStyle(color: Colors.grey, fontSize: 16),),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
+                          child: Container(
+                            width: double.infinity,
+                            child: Text.rich(
+                                TextSpan(
+                                    children:[
+                                      TextSpan(
+                                        text: snapshot.data![0].text,
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ]
+                                )
+                            ),
+                          )
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                      )
 
-          ],
-        ),
+                    ],
+                  );
+                } else{
+                  return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          child: SkeletonLine(
+                            style: SkeletonLineStyle(
+                                width: 350,
+                                height: 250,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 20)),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: SkeletonLine(
+                            style: SkeletonLineStyle(
+                              width: 300,
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 6),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: SkeletonLine(
+                            style: SkeletonLineStyle(
+                              width: 150,
+                              height: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: SkeletonParagraph(
+                            style: const SkeletonParagraphStyle(
+                                lines: 8,
+                                spacing: 8,
+                                lineStyle: SkeletonLineStyle(
+                                    height: 15,
+                                    width: 350
+                                )
+                            ),
+                          ),
+
+                        )
+                      ],
+                    ),
+                  );
+                }
+              },
+            )
       )
-    );
+      );
   }
 }
