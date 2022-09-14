@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forrus/pages/formPage.dart';
 import 'package:forrus/pages/newsPage.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,8 +22,20 @@ class _HomePageState extends State<HomePage> {
     ];
 
     final _tabIcons = [
-      BottomNavigationBarItem(icon: Icon(Icons.newspaper, color: (currentTabIndex == 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)), label: ''),
-      BottomNavigationBarItem(icon: Icon(Icons.support_agent, color: (currentTabIndex != 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)), label: '')
+      SalomonBottomBarItem(
+          icon: Icon(
+              Icons.newspaper,
+              color: (currentTabIndex == 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)),
+          title: Text('Новости'),
+          selectedColor: Color.fromRGBO(244, 198, 6, 1)
+      ),
+      SalomonBottomBarItem(
+          icon: Icon(
+              Icons.support_agent,
+              color: (currentTabIndex != 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)),
+          title: Text('Поддержка'),
+          selectedColor: Color.fromRGBO(244, 198, 6, 1)
+      )
     ];
 
 
@@ -34,10 +47,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromRGBO(244, 198, 6, 1),
       ),
       body: _tabPages[currentTabIndex],
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: SalomonBottomBar(
         items: _tabIcons,
         currentIndex: currentTabIndex,
-        type: BottomNavigationBarType.fixed,
+        //type: BottomNavigationBarType.fixed,
         onTap: (index){
           setState((){
             currentTabIndex = index;

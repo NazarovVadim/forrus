@@ -12,5 +12,8 @@ class NewsFunc{
     }
     return editString;
   }
+
+  static bool isNewsLoaded = false;
+  static bool isSupportLoaded = false;
 }
 
