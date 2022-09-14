@@ -41,7 +41,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       appBar: AppBar(
         title: Image.asset('assets/images/forrus.jpg', width: 130,),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(244, 198, 6, 1),
+        backgroundColor: const Color.fromRGBO(244, 198, 6, 1),
       ),
       body: Align(
         alignment: Alignment.center,

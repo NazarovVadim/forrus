@@ -41,7 +41,7 @@ class _FormPageState extends State<FormPage> {
             },
           ),
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: SkeletonLine(
                 style: SkeletonLineStyle(
                   width: 360,

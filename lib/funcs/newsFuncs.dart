@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'dart:async' show Future;
 
 import 'getAPI.dart';
@@ -15,8 +13,11 @@ class NewsFunc{
     return editString;
   }
 
-  static bool isNewsLoaded = false;
+  static bool isNewsPageLoaded = false;
   static bool isSupportLoaded = false;
+
+  static bool isNewsContentLoaded = false;
+
   static late Future<List<News>> futureTopNewsLoaded;
   static late Future<List<News>> futureLatestNewsLoaded;
 }

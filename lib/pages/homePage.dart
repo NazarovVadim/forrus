@@ -25,16 +25,16 @@ class _HomePageState extends State<HomePage> {
       SalomonBottomBarItem(
           icon: Icon(
               Icons.newspaper,
-              color: (currentTabIndex == 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)),
-          title: Text('Новости'),
-          selectedColor: Color.fromRGBO(244, 198, 6, 1)
+              color: (currentTabIndex == 0) ? const Color.fromRGBO(244, 198, 6, 1) : const Color.fromRGBO(29, 31, 38, 1)),
+          title: const Text('Новости'),
+          selectedColor: const Color.fromRGBO(244, 198, 6, 1)
       ),
       SalomonBottomBarItem(
           icon: Icon(
               Icons.support_agent,
-              color: (currentTabIndex != 0) ? Color.fromRGBO(244, 198, 6, 1) : Color.fromRGBO(29, 31, 38, 1)),
-          title: Text('Поддержка'),
-          selectedColor: Color.fromRGBO(244, 198, 6, 1)
+              color: (currentTabIndex != 0) ? const Color.fromRGBO(244, 198, 6, 1) : const Color.fromRGBO(29, 31, 38, 1)),
+          title:const  Text('Поддержка'),
+          selectedColor: const Color.fromRGBO(244, 198, 6, 1)
       )
     ];
 
@@ -44,16 +44,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Image.asset('assets/images/forrus.jpg', width: 130,),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(244, 198, 6, 1),
+        backgroundColor: const Color.fromRGBO(244, 198, 6, 1),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async{
-          setState((){
-
-          });
-        },
-        child: _tabPages[currentTabIndex],
-      ),
+      body: _tabPages[currentTabIndex],
       bottomNavigationBar: SalomonBottomBar(
         items: _tabIcons,
         currentIndex: currentTabIndex,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:forrus/funcs/getAPI.dart';
 import 'package:forrus/funcs/newsFuncs.dart';
+import 'package:forrus/pages/formPage.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:forrus/pages/detailNewsPage.dart';
 
@@ -16,19 +17,17 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   late Future<List<News>> futureTopNews;
   late Future<List<News>> futureLatestNews;
-  late Future<List<News>> emptyFuture;
 
   @override
   void initState(){
     super.initState();
 
-    if(!NewsFunc.isNewsLoaded){
+    if(!NewsFunc.isNewsPageLoaded){
       futureTopNews = fetchNews(true);
       NewsFunc.futureTopNewsLoaded = futureTopNews;
       futureLatestNews = fetchNews(false);
       NewsFunc.futureLatestNewsLoaded = futureLatestNews;
-      NewsFunc.isNewsLoaded = true;
-
+      NewsFunc.isNewsPageLoaded = true;
     }
 
   }
@@ -37,7 +36,19 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context){
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: RefreshIndicator(
+          color: Colors.black,
+          onRefresh: ()async{
+            setState((){
+              futureTopNews = fetchNews(true);
+              NewsFunc.futureTopNewsLoaded = futureTopNews;
+              futureLatestNews = fetchNews(false);
+              NewsFunc.futureLatestNewsLoaded = futureLatestNews;
+              NewsFunc.isNewsContentLoaded = false;
+            });
+            return Future<void>.delayed(const Duration(seconds: 2));
+          },
+          child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,6 +61,13 @@ class _NewsPageState extends State<NewsPage> {
                         future: NewsFunc.futureTopNewsLoaded,
                         builder: (context, snapshot){
                           if(snapshot.hasData){
+                            NewsFunc.isNewsContentLoaded = true;
+                            print( NewsFunc.isNewsContentLoaded);
+                          } else{
+                            NewsFunc.isNewsContentLoaded = false;
+                            print( NewsFunc.isNewsContentLoaded);
+                          }
+                          if( NewsFunc.isNewsContentLoaded){
                             return ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
@@ -72,7 +90,7 @@ class _NewsPageState extends State<NewsPage> {
                                           );
                                         },
                                         child: Padding(
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding: const EdgeInsets.only(left: 10),
                                           child: Stack(
 
                                             alignment: Alignment.bottomLeft,
@@ -141,7 +159,7 @@ class _NewsPageState extends State<NewsPage> {
                             return Row(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: SkeletonLine(
                                     style: SkeletonLineStyle(
                                         width: 300,
@@ -151,7 +169,7 @@ class _NewsPageState extends State<NewsPage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: SkeletonLine(
                                     style: SkeletonLineStyle(
                                         width: 300,
@@ -197,7 +215,7 @@ class _NewsPageState extends State<NewsPage> {
                                   },
                                   child: Row(
                                     children: [
-                                      Padding(padding: EdgeInsets.only(left: 10)),
+                                      const Padding(padding: EdgeInsets.only(left: 10)),
                                       Hero(
                                         tag: snapshot.data![index].id,
                                         child: ClipRRect(
@@ -246,7 +264,7 @@ class _NewsPageState extends State<NewsPage> {
                             children: [
                               Row(
                                 children: [
-                                  Padding(padding: EdgeInsets.only(left: 10)),
+                                  const Padding(padding: EdgeInsets.only(left: 10)),
                                   SkeletonLine(
                                     style: SkeletonLineStyle(
                                         width: 80,
@@ -273,7 +291,7 @@ class _NewsPageState extends State<NewsPage> {
 
                                             ),
                                           ),
-                                          Padding(
+                                          const Padding(
                                             padding: EdgeInsets.only(left: 8, top: 3),
                                             child: SkeletonLine(
                                               style: SkeletonLineStyle(
@@ -289,10 +307,10 @@ class _NewsPageState extends State<NewsPage> {
                                   IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
                                 ],
                               ),
-                              Padding(padding: EdgeInsets.only(top: 15)),
+                              const Padding(padding: EdgeInsets.only(top: 15)),
                               Row(
                                 children: [
-                                  Padding(padding: EdgeInsets.only(left: 10)),
+                                  const Padding(padding: EdgeInsets.only(left: 10)),
                                   SkeletonLine(
                                     style: SkeletonLineStyle(
                                         width: 80,
@@ -319,7 +337,7 @@ class _NewsPageState extends State<NewsPage> {
 
                                             ),
                                           ),
-                                          Padding(
+                                          const Padding(
                                             padding: EdgeInsets.only(left: 8, top: 3),
                                             child: SkeletonLine(
                                               style: SkeletonLineStyle(
@@ -345,6 +363,7 @@ class _NewsPageState extends State<NewsPage> {
                 ]
             ),
           ),
+        )
         )
       );
   }
