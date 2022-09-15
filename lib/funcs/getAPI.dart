@@ -22,6 +22,7 @@ class News {
     required this.isTopNews
   });
 
+
 }
 
 Future<List<News>> fetchNews(bool isTopNews) async {

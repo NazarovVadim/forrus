@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:forrus/funcs/getAPI.dart';
 import 'package:forrus/funcs/newsFuncs.dart';
 import 'package:forrus/pages/formPage.dart';
@@ -17,6 +18,9 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   late Future<List<News>> futureTopNews;
   late Future<List<News>> futureLatestNews;
+  //late Future<List<News>> futureDetail;
+
+
 
   @override
   void initState(){
@@ -35,8 +39,7 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
+      body: RefreshIndicator(
           color: Colors.black,
           onRefresh: ()async{
             setState((){
@@ -46,15 +49,16 @@ class _NewsPageState extends State<NewsPage> {
               NewsFunc.futureLatestNewsLoaded = futureLatestNews;
             });
             print('refreshed');
-            return Future<void>.delayed(const Duration(seconds: 2));
+            return Future<void>.delayed(const Duration(seconds: 1));
           },
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
                     child: Container(
                       height: 210,
                       child: FutureBuilder<List<News>>(
@@ -69,19 +73,19 @@ class _NewsPageState extends State<NewsPage> {
                             return ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
+                                //physics: BouncingScrollPhysics(),
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (BuildContext context, int index){
                                   if(snapshot.data![index].isTopNews){
                                     return GestureDetector(
                                         onTap: (){
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DetailNewsPage(
-                                                id: snapshot.data![index].id,
-                                              ),
-                                            ),
-                                          );
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => DetailNewsPage(
+                                                  id: snapshot.data![index].id,
+                                                ),
+                                                )
+                                            );
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 10),
@@ -96,7 +100,7 @@ class _NewsPageState extends State<NewsPage> {
                                                 height: 200,
                                                 //color: Colors.black,
                                                 decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
                                                   gradient:  LinearGradient(
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
@@ -111,7 +115,7 @@ class _NewsPageState extends State<NewsPage> {
                                               Hero(
                                                 tag: snapshot.data![index].id,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.circular(25),
+                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
                                                   child: Image.network(
                                                       snapshot.data![index].pictureUrl,
                                                       width: 300,
@@ -180,7 +184,7 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    padding: EdgeInsets.only(top: 30, left: 10, bottom: 10),
                     child: Text('Последнее', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                   ),
                   FutureBuilder<List<News>>(
@@ -195,17 +199,19 @@ class _NewsPageState extends State<NewsPage> {
                           return ListView.builder(
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (BuildContext context, int index){
                               if(!snapshot.data![index].isTopNews){
                                 return GestureDetector(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                          id: snapshot.data![index].id,
-                                        ),
-                                        )
-                                    );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => DetailNewsPage(
+                                            id: snapshot.data![index].id,
+                                          ),
+                                          )
+                                      );
+
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 10, left: 10),
@@ -213,17 +219,31 @@ class _NewsPageState extends State<NewsPage> {
                                       children: [
                                         Hero(
                                           tag: snapshot.data![index].id,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(15),
-                                            child: Image.network(
-                                              snapshot.data![index].pictureUrl,
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.cover,
-                                              // color: const Color.fromRGBO(255, 255, 255, 0.5),
-                                              // colorBlendMode: BlendMode.modulate
+                                          // child: ClipRRect(
+                                          //   borderRadius: BorderRadius.circular(15),
+                                          //   child: Image.network(
+                                          //     snapshot.data![index].pictureUrl,
+                                          //     width: 80,
+                                          //     height: 80,
+                                          //     fit: BoxFit.cover,
+                                          //     // color: const Color.fromRGBO(255, 255, 255, 0.5),
+                                          //     // colorBlendMode: BlendMode.modulate
+                                          //   ),
+                                          // ),
+                                          child: Container(
+                                            width: 90,
+                                            height: 90,
+                                            child: ClipPolygon(
+                                              child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
+                                              // boxShadows: [
+                                              //   PolygonBoxShadow(color: Colors.black, elevation: 2.0),
+                                              //   PolygonBoxShadow(color: Colors.yellow, elevation: 4.0),
+                                              //   PolygonBoxShadow(color: Colors.red, elevation: 6.0),
+                                              // ],
+                                              sides: 6,
+                                              borderRadius: 10,
                                             ),
-                                          ),
+                                          )
                                         ),
                                         const Padding(padding: EdgeInsets.only(right: 10)),
                                         Expanded(
@@ -245,7 +265,18 @@ class _NewsPageState extends State<NewsPage> {
                                           ),
                                         ),
 
-                                        IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
+                                        IconButton(
+                                            onPressed: (){
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => DetailNewsPage(
+                                                      id: snapshot.data![index].id,
+                                                    ),
+                                                    )
+                                                );
+                                            },
+                                            icon: const Icon(Icons.arrow_forward_ios_outlined)
+                                        )
                                       ],
                                     ),
                                   )
@@ -354,10 +385,11 @@ class _NewsPageState extends State<NewsPage> {
                         }
                       },
                     ),
+                  SizedBox(height: 20,)
+
                 ]
             ),
           ),
-        )
         )
       );
   }
