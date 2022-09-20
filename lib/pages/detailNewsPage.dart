@@ -31,11 +31,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset('assets/images/forrus.jpg', width: 130,),
-        centerTitle: true,
-        backgroundColor: const Color.fromRGBO(244, 198, 6, 1),
-      ),
+
       body: SingleChildScrollView(
             child: FutureBuilder<List<News>>(
               future: futureDetail,

@@ -39,6 +39,7 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      backgroundColor: Color.fromRGBO(1, 1, 1, 0),
       body: RefreshIndicator(
           color: Colors.black,
           onRefresh: ()async{
@@ -52,14 +53,19 @@ class _NewsPageState extends State<NewsPage> {
             return Future<void>.delayed(const Duration(seconds: 1));
           },
           child: SingleChildScrollView(
+
             physics: BouncingScrollPhysics(),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SingleChildScrollView(
+
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
                     child: Container(
+                      decoration: BoxDecoration(
+                        //color: Colors.white
+                      ),
                       height: 210,
                       child: FutureBuilder<List<News>>(
                         future: NewsFunc.futureTopNewsLoaded,
@@ -71,6 +77,7 @@ class _NewsPageState extends State<NewsPage> {
                           }
                           if( NewsFunc.isNewsContentLoaded){
                             return ListView.builder(
+
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
                                 //physics: BouncingScrollPhysics(),
@@ -121,7 +128,7 @@ class _NewsPageState extends State<NewsPage> {
                                                       width: 300,
                                                       height: 200,
                                                       fit: BoxFit.cover,
-                                                      color: const Color.fromRGBO(255, 255, 255, 0.5),
+                                                      color: const Color.fromRGBO(255, 255, 255, 1),
                                                       colorBlendMode: BlendMode.modulate
                                                   ),
                                                 ),
@@ -183,10 +190,16 @@ class _NewsPageState extends State<NewsPage> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                    child: Text('Последнее', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                  SizedBox(height: 10,),
+                  Container(
+                    decoration: BoxDecoration(color: Colors.white,),
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                      child: Text('Последнее', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                    ),
                   ),
+                  SizedBox(height: 10,),
                   FutureBuilder<List<News>>(
                       future: NewsFunc.futureLatestNewsLoaded,
                       builder: (context, snapshot){
@@ -213,60 +226,46 @@ class _NewsPageState extends State<NewsPage> {
                                       );
 
                                   },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 10, left: 10),
-                                    child: Row(
-                                      children: [
-                                        Hero(
-                                          tag: snapshot.data![index].id,
-                                          // child: ClipRRect(
-                                          //   borderRadius: BorderRadius.circular(15),
-                                          //   child: Image.network(
-                                          //     snapshot.data![index].pictureUrl,
-                                          //     width: 80,
-                                          //     height: 80,
-                                          //     fit: BoxFit.cover,
-                                          //     // color: const Color.fromRGBO(255, 255, 255, 0.5),
-                                          //     // colorBlendMode: BlendMode.modulate
-                                          //   ),
-                                          // ),
-                                          child: Container(
-                                            width: 90,
-                                            height: 90,
-                                            child: ClipPolygon(
-                                              child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
-                                              // boxShadows: [
-                                              //   PolygonBoxShadow(color: Colors.black, elevation: 2.0),
-                                              //   PolygonBoxShadow(color: Colors.yellow, elevation: 4.0),
-                                              //   PolygonBoxShadow(color: Colors.red, elevation: 6.0),
-                                              // ],
-                                              sides: 6,
-                                              borderRadius: 10,
-                                            ),
-                                          )
-                                        ),
-                                        const Padding(padding: EdgeInsets.only(right: 10)),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text.rich(
-                                              TextSpan(
-                                                  children:[
-                                                    TextSpan(
-                                                      text: snapshot.data![index].name + '\n',
-                                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                                                    ),
-                                                    TextSpan(
-                                                        text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
-                                                      //style: TextStyle(fontSize: 14),
-                                                    ),
-                                                    TextSpan(text: snapshot.data![index].date)
-                                                  ]
+                                  child: Container(
+                                    decoration: BoxDecoration(color: Colors.white),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Row(
+                                        children: [
+                                          Hero(
+                                              tag: snapshot.data![index].id,
+                                              child: Container(
+                                                width: 90,
+                                                height: 90,
+                                                child: ClipPolygon(
+                                                  child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
+                                                  sides: 6,
+                                                  borderRadius: 10,
+                                                ),
                                               )
                                           ),
-                                        ),
+                                          const Padding(padding: EdgeInsets.only(right: 10)),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text.rich(
+                                                TextSpan(
+                                                    children:[
+                                                      TextSpan(
+                                                        text: snapshot.data![index].name + '\n',
+                                                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                                                      ),
+                                                      TextSpan(
+                                                          text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
+                                                        //style: TextStyle(fontSize: 14),
+                                                      ),
+                                                      TextSpan(text: snapshot.data![index].date)
+                                                    ]
+                                                )
+                                            ),
+                                          ),
 
-                                        IconButton(
-                                            onPressed: (){
+                                          IconButton(
+                                              onPressed: (){
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(builder: (context) => DetailNewsPage(
@@ -274,10 +273,11 @@ class _NewsPageState extends State<NewsPage> {
                                                     ),
                                                     )
                                                 );
-                                            },
-                                            icon: const Icon(Icons.arrow_forward_ios_outlined)
-                                        )
-                                      ],
+                                              },
+                                              icon: const Icon(Icons.arrow_forward_ios_outlined)
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   )
                                 );

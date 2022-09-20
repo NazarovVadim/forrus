@@ -41,32 +41,16 @@ class _HomePageState extends State<HomePage> {
 
 
     return Scaffold(
-      appBar: AppBar(
-        //title: Image.asset('assets/images/appbar4.png', fit: BoxFit.cover,),
-        // centerTitle: true,
-        backgroundColor: const Color.fromRGBO(244, 198, 6, 1),
-        // flexibleSpace: FlexibleSpaceBar(
-        //   background: Image.asset('assets/images/appbar2.png', fit: BoxFit.fill,),,
-        // ),
-        //title: Image.asset('assets/images/appbar2.png', width: double.infinity,),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Image.asset('assets/images/bg.png', width: double.infinity,),
+            _tabPages[currentTabIndex],
+
+          ],
+        ),
       ),
-      body: _tabPages[currentTabIndex],
-      // body: CustomScrollView(
-      //   slivers: <Widget>[
-      //     SliverAppBar(
-      //       pinned: true,
-      //       snap: false,
-      //       floating: false,
-      //       expandedHeight: 90,
-      //       flexibleSpace: FlexibleSpaceBar(
-      //         background: Image.asset('assets/images/appbar4.png', fit: BoxFit.cover,),
-      //       ),
-      //     ),
-      //     SliverFillRemaining(
-      //       child: _tabPages[currentTabIndex],
-      //     )
-      //   ],
-      // ),
+
       bottomNavigationBar: SalomonBottomBar(
         items: _tabIcons,
         currentIndex: currentTabIndex,
