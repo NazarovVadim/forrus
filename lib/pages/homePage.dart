@@ -41,10 +41,16 @@ class _HomePageState extends State<HomePage> {
 
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 244, 198, 6),
+        title: Image.asset('assets/images/logo_black.png', width: 150,),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Stack(
           children: [
-            Image.asset('assets/images/bg.png', width: double.infinity,),
+            Image.asset('assets/images/bg2.png', width: double.infinity,),
             _tabPages[currentTabIndex],
 
           ],

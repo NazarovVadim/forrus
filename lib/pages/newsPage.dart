@@ -58,14 +58,12 @@ class _NewsPageState extends State<NewsPage> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20,),
                   SingleChildScrollView(
 
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
                     child: Container(
-                      decoration: BoxDecoration(
-                        //color: Colors.white
-                      ),
                       height: 210,
                       child: FutureBuilder<List<News>>(
                         future: NewsFunc.futureTopNewsLoaded,
@@ -95,65 +93,73 @@ class _NewsPageState extends State<NewsPage> {
                                             );
                                         },
                                         child: Padding(
-                                          padding: const EdgeInsets.only(left: 10),
-                                          child: Stack(
+                                            padding: const EdgeInsets.only(left: 10),
+                                            child: Stack(
 
-                                            alignment: Alignment.bottomLeft,
+                                              alignment: Alignment.bottomLeft,
 
-                                            children: <Widget>[
-                                              Container(
+                                              children: <Widget>[
+                                                Container(
 
-                                                width: 300,
-                                                height: 200,
-                                                //color: Colors.black,
-                                                decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
-                                                  gradient:  LinearGradient(
-                                                    begin: Alignment.topCenter,
-                                                    end: Alignment.bottomCenter,
-                                                    colors: [
-                                                      Color.fromRGBO(0, 0, 0, 0.4),
-                                                      Color.fromRGBO(0, 0, 0, 0.9)
+                                                  width: 300,
+                                                  height: 200,
+                                                  //color: Colors.black,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+                                                    boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey.withOpacity(0.5),
+                                                            spreadRadius: 3,
+                                                            blurRadius: 3,
+                                                            offset: Offset(0, 0), // changes position of shadow
+                                                          ),
+                                                        ],
+                                                    gradient:  LinearGradient(
+                                                      begin: Alignment.topCenter,
+                                                      end: Alignment.bottomCenter,
+                                                      colors: [
+                                                        Color.fromRGBO(0, 0, 0, 0.4),
+                                                        Color.fromRGBO(0, 0, 0, 0.9)
+                                                      ],
+                                                    ),
+                                                    //image: DecorationImage(image: Image.asset('assets/images/1img.jpg'))
+                                                  ),
+                                                ),
+                                                Hero(
+                                                  tag: snapshot.data![index].id,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+                                                    child: Image.network(
+                                                        snapshot.data![index].pictureUrl,
+                                                        width: 300,
+                                                        height: 200,
+                                                        fit: BoxFit.cover,
+                                                        color: const Color.fromRGBO(255, 255, 255, 1),
+                                                        colorBlendMode: BlendMode.modulate
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 20, bottom: 20),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Flexible(
+                                                          child: Container(
+                                                            width: 300,
+                                                            child: Text( snapshot.data![index].name , style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20)),
+                                                          )
+                                                      ),
+                                                      snapshot.data![index].date != null ? Text(snapshot.data![index].date,style: const TextStyle(color: Colors.white, fontSize: 14)) : SizedBox.shrink()
                                                     ],
                                                   ),
-                                                  //image: DecorationImage(image: Image.asset('assets/images/1img.jpg'))
                                                 ),
-                                              ),
-                                              Hero(
-                                                tag: snapshot.data![index].id,
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
-                                                  child: Image.network(
-                                                      snapshot.data![index].pictureUrl,
-                                                      width: 300,
-                                                      height: 200,
-                                                      fit: BoxFit.cover,
-                                                      color: const Color.fromRGBO(255, 255, 255, 1),
-                                                      colorBlendMode: BlendMode.modulate
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 20, bottom: 20),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    Flexible(
-                                                        child: Container(
-                                                          width: 300,
-                                                          child: Text( snapshot.data![index].name , style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20)),
-                                                        )
-                                                    ),
-                                                    snapshot.data![index].date != null ? Text(snapshot.data![index].date,style: const TextStyle(color: Colors.white, fontSize: 14)) : SizedBox.shrink()
-                                                  ],
-                                                ),
-                                              ),
 
 
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        )
                                     );
                                   } else{
                                     return const SizedBox.shrink();
@@ -191,14 +197,10 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Container(
-                    decoration: BoxDecoration(color: Colors.white,),
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
-                      child: Text('Последнее', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+                   Padding(
+                      padding: EdgeInsets.only(top: 10, left: 10),
+                      child: Text('Последние новости', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                     ),
-                  ),
                   SizedBox(height: 10,),
                   FutureBuilder<List<News>>(
                       future: NewsFunc.futureLatestNewsLoaded,
@@ -209,82 +211,101 @@ class _NewsPageState extends State<NewsPage> {
                           NewsFunc.isNewsContentLoaded = false;
                         }
                         if(NewsFunc.isNewsContentLoaded){
-                          return ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index){
-                              if(!snapshot.data![index].isTopNews){
-                                return GestureDetector(
-                                  onTap: (){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                            id: snapshot.data![index].id,
-                                          ),
-                                          )
-                                      );
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index){
+                                if(!snapshot.data![index].isTopNews){
+                                  return GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => DetailNewsPage(
+                                              id: snapshot.data![index].id,
+                                            ),
+                                            )
+                                        );
 
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(color: Colors.white),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Row(
+                                      },
+                                      child: Column(
                                         children: [
-                                          Hero(
-                                              tag: snapshot.data![index].id,
-                                              child: Container(
-                                                width: 90,
-                                                height: 90,
-                                                child: ClipPolygon(
-                                                  child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
-                                                  sides: 6,
-                                                  borderRadius: 10,
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(15),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.05),
+                                                  spreadRadius: 3,
+                                                  blurRadius: 3,
+                                                  offset: Offset(0, 3), // changes position of shadow
                                                 ),
-                                              )
-                                          ),
-                                          const Padding(padding: EdgeInsets.only(right: 10)),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text.rich(
-                                                TextSpan(
-                                                    children:[
-                                                      TextSpan(
-                                                        text: snapshot.data![index].name + '\n',
-                                                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                                                      ),
-                                                      TextSpan(
-                                                          text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
-                                                        //style: TextStyle(fontSize: 14),
-                                                      ),
-                                                      TextSpan(text: snapshot.data![index].date)
-                                                    ]
-                                                )
+                                              ]
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Row(
+                                                children: [
+                                                  Hero(
+                                                      tag: snapshot.data![index].id,
+                                                      child: Container(
+                                                        width: 90,
+                                                        height: 90,
+                                                        child: ClipPolygon(
+                                                          child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
+                                                          sides: 6,
+                                                          borderRadius: 10,
+                                                        ),
+                                                      )
+                                                  ),
+                                                  const Padding(padding: EdgeInsets.only(right: 10)),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text.rich(
+                                                        TextSpan(
+                                                            children:[
+                                                              TextSpan(
+                                                                text: snapshot.data![index].name + '\n',
+                                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                                                              ),
+                                                              TextSpan(
+                                                                  text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
+                                                                //style: TextStyle(fontSize: 14),
+                                                              ),
+                                                              TextSpan(text: snapshot.data![index].date)
+                                                            ]
+                                                        )
+                                                    ),
+                                                  ),
+
+                                                  IconButton(
+                                                      onPressed: (){
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => DetailNewsPage(
+                                                              id: snapshot.data![index].id,
+                                                            ),
+                                                            )
+                                                        );
+                                                      },
+                                                      icon: const Icon(Icons.arrow_forward_ios_outlined)
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
-
-                                          IconButton(
-                                              onPressed: (){
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                                      id: snapshot.data![index].id,
-                                                    ),
-                                                    )
-                                                );
-                                              },
-                                              icon: const Icon(Icons.arrow_forward_ios_outlined)
-                                          )
+                                          SizedBox(height: 15,)
                                         ],
-                                      ),
-                                    ),
-                                  )
-                                );
-                              } else{
-                                return const SizedBox.shrink();
-                              }
-                            },
+                                      )
+                                  );
+                                } else{
+                                  return const SizedBox.shrink();
+                                }
+                              },
+                            ),
                           );
                         } else{
                           return Column(
