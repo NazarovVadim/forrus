@@ -78,7 +78,6 @@ class _NewsPageState extends State<NewsPage> {
 
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                //physics: BouncingScrollPhysics(),
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (BuildContext context, int index){
                                   if(snapshot.data![index].isTopNews){
@@ -93,38 +92,13 @@ class _NewsPageState extends State<NewsPage> {
                                             );
                                         },
                                         child: Padding(
-                                            padding: const EdgeInsets.only(left: 10),
+                                            padding: const EdgeInsets.only(left: 10,bottom: 10),
                                             child: Stack(
 
                                               alignment: Alignment.bottomLeft,
 
                                               children: <Widget>[
-                                                Container(
 
-                                                  width: 300,
-                                                  height: 200,
-                                                  //color: Colors.black,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
-                                                    boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.grey.withOpacity(0.5),
-                                                            spreadRadius: 3,
-                                                            blurRadius: 3,
-                                                            offset: Offset(0, 0), // changes position of shadow
-                                                          ),
-                                                        ],
-                                                    gradient:  LinearGradient(
-                                                      begin: Alignment.topCenter,
-                                                      end: Alignment.bottomCenter,
-                                                      colors: [
-                                                        Color.fromRGBO(0, 0, 0, 0.4),
-                                                        Color.fromRGBO(0, 0, 0, 0.9)
-                                                      ],
-                                                    ),
-                                                    //image: DecorationImage(image: Image.asset('assets/images/1img.jpg'))
-                                                  ),
-                                                ),
                                                 Hero(
                                                   tag: snapshot.data![index].id,
                                                   child: ClipRRect(
@@ -139,10 +113,36 @@ class _NewsPageState extends State<NewsPage> {
                                                     ),
                                                   ),
                                                 ),
+                                                Container(
+
+                                                  width: 300,
+                                                  height: 200,
+                                                  //color: Colors.black,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withOpacity(0.5),
+                                                        spreadRadius: 3,
+                                                        blurRadius: 3,
+                                                        offset: Offset(0, 0), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                    gradient:  LinearGradient(
+                                                      begin: Alignment.topCenter,
+                                                      end: Alignment.bottomCenter,
+                                                      colors: [
+                                                        Color.fromRGBO(0, 0, 0, 0.25),
+                                                        Color.fromRGBO(0, 0, 0, 0.7)
+                                                      ],
+                                                    ),
+                                                    //image: DecorationImage(image: Image.asset('assets/images/1img.jpg'))
+                                                  ),
+                                                ),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 20, bottom: 20),
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       Flexible(
@@ -196,12 +196,12 @@ class _NewsPageState extends State<NewsPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                   Padding(
+                  const SizedBox(height: 10,),
+                  const Padding(
                       padding: EdgeInsets.only(top: 10, left: 10),
                       child: Text('Последние новости', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                     ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   FutureBuilder<List<News>>(
                       future: NewsFunc.futureLatestNewsLoaded,
                       builder: (context, snapshot){
@@ -212,11 +212,11 @@ class _NewsPageState extends State<NewsPage> {
                         }
                         if(NewsFunc.isNewsContentLoaded){
                           return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: ListView.builder(
                               itemCount: snapshot.data!.length,
                               shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               itemBuilder: (BuildContext context, int index){
                                 if(!snapshot.data![index].isTopNews){
                                   return GestureDetector(
@@ -241,12 +241,12 @@ class _NewsPageState extends State<NewsPage> {
                                                   color: Colors.grey.withOpacity(0.05),
                                                   spreadRadius: 3,
                                                   blurRadius: 3,
-                                                  offset: Offset(0, 3), // changes position of shadow
+                                                  offset: const Offset(0, 3), // changes position of shadow
                                                 ),
                                               ]
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: 10),
+                                              padding: const EdgeInsets.only(left: 10),
                                               child: Row(
                                                 children: [
                                                   Hero(

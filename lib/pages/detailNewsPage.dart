@@ -31,11 +31,19 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: SingleChildScrollView(
-            child: FutureBuilder<List<News>>(
-              future: futureDetail,
-              builder: (context, snapshot){
+      appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 244, 198, 6),
+          title: Image.asset('assets/images/logo_black.png', width: 150,),
+          centerTitle: true,
+          elevation: 0,
+      ),
+      body: Stack(
+        children: [
+          Image.asset('assets/images/bg2.png', width: double.infinity,),
+          SingleChildScrollView(
+              child: FutureBuilder<List<News>>(
+                future: futureDetail,
+                builder: (context, snapshot){
                   // Future<void>.delayed(const Duration(seconds: 2));
                   if(snapshot.hasData){
                     return Column(
@@ -46,13 +54,17 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           tag: id,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              snapshot.data![0].pictureUrl,
-                              width: 350,
-                              fit: BoxFit.cover,
-                              // color: const Color.fromRGBO(255, 255, 255, 0.5),
-                              // colorBlendMode: BlendMode.modulate
-                            ),
+
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.grey),
+                              child: Image.network(
+                                snapshot.data![0].pictureUrl,
+                                width: 350,
+                                fit: BoxFit.cover,
+                                // color: const Color.fromRGBO(255, 255, 255, 0.5),
+                                // colorBlendMode: BlendMode.modulate
+                              ),
+                            )
                           ),
                         ),
                         Padding(
@@ -149,9 +161,12 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                     );
                   }
 
-              },
-            )
+                },
+              )
+          )
+        ],
       )
+
       );
   }
 }
