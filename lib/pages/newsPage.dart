@@ -109,7 +109,8 @@ class _NewsPageState extends State<NewsPage> {
                                                         height: 200,
                                                         fit: BoxFit.cover,
                                                         color: const Color.fromRGBO(255, 255, 255, 1),
-                                                        colorBlendMode: BlendMode.modulate
+                                                        colorBlendMode: BlendMode.modulate,
+
                                                     ),
                                                   ),
                                                 ),
@@ -119,7 +120,7 @@ class _NewsPageState extends State<NewsPage> {
                                                   height: 200,
                                                   //color: Colors.black,
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+                                                    borderRadius: const BorderRadius.only(topRight: Radius.circular(25)),
                                                     boxShadow: [
                                                       BoxShadow(
                                                         color: Colors.grey.withOpacity(0.5),
@@ -128,7 +129,7 @@ class _NewsPageState extends State<NewsPage> {
                                                         offset: Offset(0, 0), // changes position of shadow
                                                       ),
                                                     ],
-                                                    gradient:  LinearGradient(
+                                                    gradient:  const LinearGradient(
                                                       begin: Alignment.topCenter,
                                                       end: Alignment.bottomCenter,
                                                       colors: [

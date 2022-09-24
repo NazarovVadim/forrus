@@ -61,6 +61,15 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                 snapshot.data![0].pictureUrl,
                                 width: 350,
                                 fit: BoxFit.cover,
+                                  loadingBuilder: (BuildContext context, Widget child,
+                                      ImageChunkEvent? loadingProgress){
+                                    if(loadingProgress == null) return child;
+                                    return Container(
+                                      color: Colors.grey,
+                                      height: 200,
+                                      width: 350,
+                                    );
+                                  }
                                 // color: const Color.fromRGBO(255, 255, 255, 0.5),
                                 // colorBlendMode: BlendMode.modulate
                               ),
