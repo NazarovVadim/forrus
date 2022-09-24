@@ -64,10 +64,11 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                   loadingBuilder: (BuildContext context, Widget child,
                                       ImageChunkEvent? loadingProgress){
                                     if(loadingProgress == null) return child;
-                                    return Container(
-                                      color: Colors.grey,
-                                      height: 200,
-                                      width: 350,
+                                    return const SkeletonLine(
+                                      style: SkeletonLineStyle(
+                                        width: 350,
+                                        height: 200
+                                      ),
                                     );
                                   }
                                 // color: const Color.fromRGBO(255, 255, 255, 0.5),
