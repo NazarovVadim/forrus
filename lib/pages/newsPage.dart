@@ -45,11 +45,11 @@ class _NewsPageState extends State<NewsPage> {
           onRefresh: ()async{
             setState((){
               futureTopNews = fetchNews(true);
+
               NewsFunc.futureTopNewsLoaded = futureTopNews;
               futureLatestNews = fetchNews(false);
               NewsFunc.futureLatestNewsLoaded = futureLatestNews;
             });
-            print('refreshed');
             return Future<void>.delayed(const Duration(seconds: 1));
           },
           child: SingleChildScrollView(
@@ -64,7 +64,7 @@ class _NewsPageState extends State<NewsPage> {
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
                     child: Container(
-                      height: 210,
+                      height: 220,
                       child: FutureBuilder<List<News>>(
                         future: NewsFunc.futureTopNewsLoaded,
                         builder: (context, snapshot){
@@ -86,8 +86,8 @@ class _NewsPageState extends State<NewsPage> {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                                  id: snapshot.data![index].id,
-                                                ),
+                                                    id: snapshot.data![index].id,
+                                                  ),
                                                 )
                                             );
                                         },

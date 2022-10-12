@@ -36,11 +36,13 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
           title: Image.asset('assets/images/logo_black.png', width: 150,),
           centerTitle: true,
           elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Stack(
         children: [
           Image.asset('assets/images/bg2.png', width: double.infinity,),
           SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
               child: FutureBuilder<List<News>>(
                 future: futureDetail,
                 builder: (context, snapshot){
@@ -59,14 +61,14 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               decoration: BoxDecoration(color: Colors.grey),
                               child: Image.network(
                                 snapshot.data![0].pictureUrl,
-                                width: 350,
+                                width: 300,
                                 fit: BoxFit.cover,
                                   loadingBuilder: (BuildContext context, Widget child,
                                       ImageChunkEvent? loadingProgress){
                                     if(loadingProgress == null) return child;
                                     return const SkeletonLine(
                                       style: SkeletonLineStyle(
-                                        width: 350,
+                                        width: 300,
                                         height: 200
                                       ),
                                     );
@@ -84,13 +86,14 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                               child: Text(snapshot.data![0].name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 26),),
                             )
                         ),
+                        snapshot.data![0].date.isEmpty ?
                         Padding(
                           padding: const EdgeInsets.only(top: 5, left: 30),
                           child: Container(
                             width: double.infinity,
                             child: Text(snapshot.data![0].date, style: const TextStyle(color: Colors.grey, fontSize: 16),),
                           ),
-                        ),
+                        ) : SizedBox.shrink(),
                         Padding(
                             padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
                             child: Container(

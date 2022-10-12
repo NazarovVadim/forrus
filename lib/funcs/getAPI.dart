@@ -22,12 +22,14 @@ class News {
     required this.isTopNews
   });
 
-
 }
 
 Future<List<News>> fetchNews(bool isTopNews) async {
-  var result = await http.get(Uri.parse("http://forrus.incomp.tmweb.ru/api/news/"));
+  var result = await http.get(Uri.parse("https://forrus.ru/api/news/"));
+  print(result.statusCode);
+  print(result.body);
   var jsonData = jsonDecode(result.body);
+  print(jsonData);
 
   List<News> news = [];
 
@@ -52,7 +54,7 @@ Future<List<News>> fetchNews(bool isTopNews) async {
 }
 
 Future<List<News>> fetchDetailNews(String id) async {
-  var result = await http.get(Uri.parse("http://forrus.incomp.tmweb.ru/api/news/?news_id=${id}"));
+  var result = await http.get(Uri.parse("https://forrus.ru/api/news/?news_id=${id}"));
   var jsonData = jsonDecode(result.body);
   List<News> news = [];
 
