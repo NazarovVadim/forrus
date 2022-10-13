@@ -42,8 +42,9 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60,
         backgroundColor: Color.fromARGB(255, 244, 198, 6),
-        title: Image.asset('assets/images/logo_black.png', width: 150,),
+        title: Image.asset('assets/images/logo_black_edited.png', height: 60,),
         centerTitle: true,
         elevation: 0,
       ),

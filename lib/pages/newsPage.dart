@@ -203,10 +203,10 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                   const Padding(
-                      padding: EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(left: 15),
                       child: Text('Последние новости', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                     ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(height: 15,),
                   FutureBuilder<List<News>>(
                       future: NewsFunc.futureLatestNewsLoaded,
                       builder: (context, snapshot){
@@ -217,7 +217,7 @@ class _NewsPageState extends State<NewsPage> {
                         }
                         if(NewsFunc.isNewsContentLoaded){
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 13),
                             child: ListView.builder(
                               itemCount: snapshot.data!.length,
                               shrinkWrap: true,
@@ -285,20 +285,19 @@ class _NewsPageState extends State<NewsPage> {
                                                   const Padding(padding: EdgeInsets.only(right: 10)),
                                                   Expanded(
                                                     flex: 1,
-                                                    child: Text.rich(
-                                                        TextSpan(
-                                                            children:[
-                                                              TextSpan(
-                                                                text: '${snapshot.data![index].name}\n',
-                                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                                                              ),
-                                                              TextSpan(
-                                                                  text: '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 65 ? snapshot.data![index].text.length : 65)}...\n'
-                                                                //style: TextStyle(fontSize: 14),
-                                                              ),
-                                                              TextSpan(text: snapshot.data![index].date)
-                                                            ]
-                                                        )
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                         snapshot.data![index].name[0].toUpperCase() + snapshot.data![index].name.substring(1, snapshot.data![index].name.length),
+                                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                                                        ),
+                                                        Text(
+                                                            '${NewsFunc.cutString(snapshot.data![index].text, snapshot.data![index].text.length < 50 ? snapshot.data![index].text.length : 50)}...'
+                                                          //style: TextStyle(fontSize: 14),
+                                                        ),
+                                                        snapshot.data![index].date.isNotEmpty ? Text(snapshot.data![index].date, style: TextStyle(height: 1.6)) : SizedBox.shrink()
+                                                      ],
                                                     ),
                                                   ),
 

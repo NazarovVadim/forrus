@@ -31,7 +31,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 244, 198, 6),
-          title: Image.asset('assets/images/logo_black.png', width: 150,),
+          title: Image.asset('assets/images/logo_black_edited.png', width: 150,),
           centerTitle: true,
           elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -59,17 +59,17 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
 
                                 borderRadius: BorderRadius.circular(15),
                                 child: SizedBox(
-                                  width: 300,
+                                  width: 330,
                                   child: Image.network(
                                       snapshot.data![0].pictureUrl,
-                                      width: 300,
+                                      width: 330,
                                       fit: BoxFit.cover,
                                       loadingBuilder: (BuildContext context, Widget child,
                                           ImageChunkEvent? loadingProgress){
                                         if(loadingProgress == null) return child;
                                         return const SkeletonLine(
                                           style: SkeletonLineStyle(
-                                              width: 300,
+                                              width: 330,
                                               height: 200
                                           ),
                                         );
@@ -83,7 +83,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: SizedBox(
-                                width: 300,
+                                width: 330,
                                 child: Text(snapshot.data![0].name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 26),),
                               )
                           ),
@@ -91,14 +91,14 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: SizedBox(
-                              width: 300,
+                              width: 330,
                               child: Text(snapshot.data![0].date, style: const TextStyle(color: Colors.grey, fontSize: 16),),
                             ),
                           ) : const SizedBox.shrink(),
                           Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: SizedBox(
-                                width: 300,
+                                width: 330,
                                 child: Text.rich(
                                     TextSpan(
                                         children:[
@@ -127,11 +127,11 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 300,
+                              width: 330,
                               alignment: Alignment.center,
                               child: SkeletonLine(
                                 style: SkeletonLineStyle(
-                                    width: 300,
+                                    width: 330,
                                     height: 200,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
@@ -139,17 +139,17 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             ),
                             const SizedBox(height: 40,),
                             const SizedBox(
-                              width: 300,
+                              width: 330,
                               child: SkeletonLine(
                                 style: SkeletonLineStyle(
-                                  width: 300,
+                                  width: 330,
                                   height: 15,
                                 ),
                               ),
                             ),
                             const SizedBox(height: 6,),
                             const SizedBox(
-                              width: 300,
+                              width: 330,
                               child: SkeletonLine(
                                 style: SkeletonLineStyle(
                                   width: 150,
@@ -159,7 +159,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                             ),
                             const SizedBox(height: 20,),
                            SizedBox(
-                             width: 300,
+                             width: 330,
                              child:  ListView.builder(
                                itemCount: 10,
                                shrinkWrap: true,
@@ -167,7 +167,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
                                  return const SkeletonLine(
                                      style: SkeletonLineStyle(
                                          padding: EdgeInsets.only(bottom: 8),
-                                         width: 300,
+                                         width: 330,
                                          height: 15
                                      ),
                                    );

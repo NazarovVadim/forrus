@@ -1,14 +1,11 @@
 import 'dart:async' show Future;
-
 import 'getAPI.dart';
 
 class NewsFunc{
 
   static cutString (String str,int maxLength){
-    String editString = str.substring(0, maxLength);
-    if(editString.endsWith(' ')){
-      editString.substring(0, editString.length-1);
-    }
+    int endIndex = str[maxLength-1] == ' ' ? maxLength-1 : maxLength;
+     String editString =str[0].toUpperCase() + str.substring(1, endIndex);
     return editString;
   }
 
