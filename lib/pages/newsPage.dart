@@ -1,10 +1,7 @@
-import 'dart:ui';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:forrus/funcs/getAPI.dart';
 import 'package:forrus/funcs/newsFuncs.dart';
-import 'package:forrus/pages/formPage.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:forrus/pages/detailNewsPage.dart';
 
@@ -18,9 +15,6 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   late Future<List<News>> futureTopNews;
   late Future<List<News>> futureLatestNews;
-  //late Future<List<News>> futureDetail;
-
-
 
   @override
   void initState(){
@@ -39,13 +33,12 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Color.fromRGBO(1, 1, 1, 0),
+      backgroundColor: const Color.fromRGBO(1, 1, 1, 0),
       body: RefreshIndicator(
           color: Colors.black,
           onRefresh: ()async{
             setState((){
               futureTopNews = fetchNews(true);
-
               NewsFunc.futureTopNewsLoaded = futureTopNews;
               futureLatestNews = fetchNews(false);
               NewsFunc.futureLatestNewsLoaded = futureLatestNews;
@@ -54,17 +47,18 @@ class _NewsPageState extends State<NewsPage> {
           },
           child: SingleChildScrollView(
 
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20,),
                   SingleChildScrollView(
 
                     scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     child: Container(
-                      height: 220,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      height: 230,
+                      alignment: Alignment.centerLeft,
                       child: FutureBuilder<List<News>>(
                         future: NewsFunc.futureTopNewsLoaded,
                         builder: (context, snapshot){
@@ -73,7 +67,7 @@ class _NewsPageState extends State<NewsPage> {
                           } else{
                             NewsFunc.isNewsContentLoaded = false;
                           }
-                          if( NewsFunc.isNewsContentLoaded){
+                          if(NewsFunc.isNewsContentLoaded){
                             return ListView.builder(
 
                                 scrollDirection: Axis.horizontal,
@@ -92,17 +86,14 @@ class _NewsPageState extends State<NewsPage> {
                                             );
                                         },
                                         child: Padding(
-                                            padding: const EdgeInsets.only(left: 10,bottom: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 15),
                                             child: Stack(
-
                                               alignment: Alignment.bottomLeft,
-
                                               children: <Widget>[
-
                                                 Hero(
                                                   tag: snapshot.data![index].id,
                                                   child: ClipRRect(
-                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(25)),
+                                                    borderRadius: const BorderRadius.only(topRight: Radius.circular(25)),
                                                     child: Image.network(
                                                         snapshot.data![index].pictureUrl,
                                                         width: 300,
@@ -110,6 +101,18 @@ class _NewsPageState extends State<NewsPage> {
                                                         fit: BoxFit.cover,
                                                         color: const Color.fromRGBO(255, 255, 255, 1),
                                                         colorBlendMode: BlendMode.modulate,
+                                                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress){
+                                                          if(loadingProgress == null) return child;
+                                                          return const SizedBox(
+                                                            height: 200,
+                                                            child: SkeletonLine(
+                                                              style: SkeletonLineStyle(
+                                                                  width: 300,
+                                                                  height: 200
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
 
                                                     ),
                                                   ),
@@ -118,44 +121,46 @@ class _NewsPageState extends State<NewsPage> {
 
                                                   width: 300,
                                                   height: 200,
-                                                  //color: Colors.black,
                                                   decoration: BoxDecoration(
                                                     borderRadius: const BorderRadius.only(topRight: Radius.circular(25)),
                                                     boxShadow: [
                                                       BoxShadow(
-                                                        color: Colors.grey.withOpacity(0.5),
+                                                        color: Colors.black.withOpacity(0.2),
                                                         spreadRadius: 3,
-                                                        blurRadius: 3,
-                                                        offset: Offset(0, 0), // changes position of shadow
+                                                        blurRadius: 10,
+                                                        offset: const Offset(0, 0), // changes position of shadow
                                                       ),
                                                     ],
                                                     gradient:  const LinearGradient(
                                                       begin: Alignment.topCenter,
                                                       end: Alignment.bottomCenter,
                                                       colors: [
-                                                        Color.fromRGBO(0, 0, 0, 0.25),
-                                                        Color.fromRGBO(0, 0, 0, 0.7)
+                                                        Color.fromRGBO(0, 0, 0, 0.1),
+                                                        Color.fromRGBO(0, 0, 0, 0.3)
                                                       ],
                                                     ),
-                                                    //image: DecorationImage(image: Image.asset('assets/images/1img.jpg'))
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 20, bottom: 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      Flexible(
-                                                          child: Container(
-                                                            width: 300,
-                                                            child: Text( snapshot.data![index].name , style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20)),
-                                                          )
-                                                      ),
-                                                      snapshot.data![index].date != null ? Text(snapshot.data![index].date,style: const TextStyle(color: Colors.white, fontSize: 14)) : SizedBox.shrink()
-                                                    ],
+                                                SizedBox(
+                                                  height: 100,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 20, bottom: 15),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        Flexible(
+                                                            child: SizedBox(
+                                                              width: 280,
+                                                              child: Text( snapshot.data![index].name , style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20)),
+                                                            )
+                                                        ),
+                                                        snapshot.data![index].date.isNotEmpty ? const SizedBox(height: 3,) : const SizedBox.shrink(),
+                                                        snapshot.data![index].date.isNotEmpty ? Text(snapshot.data![index].date,style: const TextStyle(color: Colors.white, fontSize: 14)) : const SizedBox.shrink()
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
+                                                )
 
 
                                               ],
@@ -197,9 +202,8 @@ class _NewsPageState extends State<NewsPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10,),
                   const Padding(
-                      padding: EdgeInsets.only(top: 10, left: 10),
+                      padding: EdgeInsets.only(left: 10),
                       child: Text('Последние новости', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                     ),
                   const SizedBox(height: 10,),
@@ -252,13 +256,29 @@ class _NewsPageState extends State<NewsPage> {
                                                 children: [
                                                   Hero(
                                                       tag: snapshot.data![index].id,
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         width: 90,
                                                         height: 90,
                                                         child: ClipPolygon(
-                                                          child: Image.network(snapshot.data![index].pictureUrl, fit: BoxFit.cover,),
                                                           sides: 6,
                                                           borderRadius: 10,
+                                                          child: Image.network(
+                                                            snapshot.data![index].pictureUrl,
+                                                            fit: BoxFit.cover,
+                                                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress){
+                                                                if(loadingProgress == null) return child;
+                                                                return const SizedBox(
+                                                                  width: 90,
+                                                                  height: 90,
+                                                                  child: SkeletonLine(
+                                                                    style: SkeletonLineStyle(
+                                                                        width: 90,
+                                                                        height: 90
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                          ),
                                                         ),
                                                       )
                                                   ),
@@ -269,7 +289,7 @@ class _NewsPageState extends State<NewsPage> {
                                                         TextSpan(
                                                             children:[
                                                               TextSpan(
-                                                                text: snapshot.data![index].name + '\n',
+                                                                text: '${snapshot.data![index].name}\n',
                                                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                                                               ),
                                                               TextSpan(
@@ -298,7 +318,7 @@ class _NewsPageState extends State<NewsPage> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(height: 15,)
+                                          const SizedBox(height: 15,)
                                         ],
                                       )
                                   );
@@ -309,105 +329,82 @@ class _NewsPageState extends State<NewsPage> {
                             ),
                           );
                         } else{
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Padding(padding: EdgeInsets.only(left: 10)),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                        width: 80,
-                                        height: 80,
-                                        borderRadius: BorderRadius.circular(15)
-                                    ),
-                                  ),
-                                  const Padding(padding: EdgeInsets.only(right: 10)),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SkeletonParagraph(
-                                            style: SkeletonParagraphStyle(
-                                                lines: 2,
-                                                spacing: 5,
-                                                lineStyle: SkeletonLineStyle(
-                                                  alignment: Alignment.topLeft,
-                                                  randomLength: true,
-                                                  height: 18,
-                                                  minLength: MediaQuery.of(context).size.width / 2,
-                                                )
+                          return ListView.builder(
+                            itemCount: 5,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index){
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child:  Row(
+                                  children: [
+                                    const SizedBox(width: 10,),
 
-                                            ),
+                                    const SizedBox(
+                                      width: 90,
+                                      height: 90,
+                                      child: ClipPolygon(
+                                        sides: 6,
+                                        borderRadius: 10,
+                                        child: SkeletonLine(
+                                          style: SkeletonLineStyle(
+                                              width: 90,
+                                              height: 90,
+                                              //borderRadius: BorderRadius.circular(15)
                                           ),
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 8, top: 3),
-                                            child: SkeletonLine(
-                                              style: SkeletonLineStyle(
-                                                  width: 80,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10,),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 8, bottom: 3),
+                                              child: SkeletonLine(
+                                                style: SkeletonLineStyle(
+                                                  randomLength: true,
                                                   height: 14
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      )
-                                  ),
-
-                                  IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
-                                ],
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 15)),
-                              Row(
-                                children: [
-                                  const Padding(padding: EdgeInsets.only(left: 10)),
-                                  SkeletonLine(
-                                    style: SkeletonLineStyle(
-                                        width: 80,
-                                        height: 80,
-                                        borderRadius: BorderRadius.circular(15)
-                                    ),
-                                  ),
-                                  const Padding(padding: EdgeInsets.only(right: 10)),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SkeletonParagraph(
-                                            style: SkeletonParagraphStyle(
-                                                lines: 2,
-                                                spacing: 5,
-                                                lineStyle: SkeletonLineStyle(
-                                                  alignment: Alignment.topLeft,
-                                                  randomLength: true,
-                                                  height: 18,
-                                                  minLength: MediaQuery.of(context).size.width / 2,
-                                                )
-
-                                            ),
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 8, top: 3),
-                                            child: SkeletonLine(
-                                              style: SkeletonLineStyle(
-                                                  width: 80,
-                                                  height: 14
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 8, bottom: 3),
+                                              child: SkeletonLine(
+                                                style: SkeletonLineStyle(
+                                                    randomLength: true,
+                                                    height: 14
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      )
-                                  ),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 8, top: 3),
+                                              child: SkeletonLine(
+                                                style: SkeletonLineStyle(
+                                                    width: 80,
+                                                    height: 14
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                    ),
 
-                                  IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
-                                ],
-                              ),
-                            ],
+                                    //IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_forward_ios_outlined))
+                                  ],
+                                ),
+                              );
+                            },
                           );
+
+
+
                         }
                       },
                     ),
-                  SizedBox(height: 20,)
+                  const SizedBox(height: 20,)
 
                 ]
             ),

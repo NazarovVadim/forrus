@@ -24,8 +24,10 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
+
         index: position,
         children: <Widget>[
+          //Image.asset('assets/images/bg2.png', width: double.infinity,),
           WebView(
             initialUrl: 'https://1os.su/helpdesk/ticket.php?domain=nav-it.bitrix24.ru',
             javascriptMode: JavascriptMode.unrestricted,
