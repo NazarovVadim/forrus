@@ -31,7 +31,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 244, 198, 6),
-          title: Image.asset('assets/images/logo_black_edited.png', width: 150,),
+          title: Image.asset('assets/images/logo_black.png', width: 150,),
           centerTitle: true,
           elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
