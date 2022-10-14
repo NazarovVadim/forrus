@@ -42,21 +42,19 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 60,
-        backgroundColor: Color.fromARGB(255, 244, 198, 6),
-        title: Image.asset('assets/images/logo_black.png', height: 40,),
+
+        backgroundColor: const Color.fromARGB(255, 244, 198, 6),
+        title: Image.asset('assets/images/logo_black.png', width: 150,),
         centerTitle: true,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Stack(
+      body: Stack(
           children: [
-            Image.asset('assets/images/bg2.png', width: double.infinity,),
+            Image.asset('assets/images/bg.png', width: double.infinity,),
             _tabPages[currentTabIndex],
 
           ],
         ),
-      ),
 
       bottomNavigationBar: SalomonBottomBar(
         items: _tabIcons,

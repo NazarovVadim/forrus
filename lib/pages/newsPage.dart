@@ -228,10 +228,7 @@ class _NewsPageState extends State<NewsPage> {
                                       onTap: (){
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => DetailNewsPage(
-                                              id: snapshot.data![index].id,
-                                            ),
-                                            )
+                                            MaterialPageRoute(builder: (context) => DetailNewsPage(id: snapshot.data![index].id,),)
                                         );
 
                                       },

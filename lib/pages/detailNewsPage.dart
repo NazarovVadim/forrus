@@ -38,7 +38,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       ),
       body: Stack(
         children: [
-          Image.asset('assets/images/bg2.png', width: double.infinity,),
+          Image.asset('assets/images/bg.png', width: double.infinity,),
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
               child: FutureBuilder<List<News>>(
