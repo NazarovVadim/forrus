@@ -26,6 +26,11 @@ class StyleFonts{
     color: Colors.black
   );
 
+  final small = TextStyle(
+    fontSize: 8,
+    color: Colors.black,
+  );
+
 }
 
 class StyleColor{
