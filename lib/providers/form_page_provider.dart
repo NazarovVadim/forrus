@@ -1,5 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:forrus/funcs/create_ticket.dart';
+import 'package:forrus/models/ticket_model.dart';
+import 'package:forrus/widgets/dialogs.dart';
 
 class FormPageProvider with ChangeNotifier{
   String? title;
@@ -7,6 +10,12 @@ class FormPageProvider with ChangeNotifier{
   String? contact;
   String? comment;
   List<PlatformFile> files = [];
+  bool waitStatus = false;
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+  TextEditingController commentController = TextEditingController();
 
   void onChangeTitle(String? value){
     title = value;
@@ -37,6 +46,10 @@ class FormPageProvider with ChangeNotifier{
         && (title!.isNotEmpty && name!.isNotEmpty && contact!.isNotEmpty && comment!.isNotEmpty);
   }
   void clear(){
+    titleController.clear();
+    nameController.clear();
+    contactController.clear();
+    commentController.clear();
     title = null;
     name = null;
     contact = null;
@@ -44,8 +57,34 @@ class FormPageProvider with ChangeNotifier{
     files = [];
   }
 
-  Future<void> onSend() async{
+  void enableWaitStatus(){
+    waitStatus = true;
+    notifyListeners();
+  }
 
+  void disableWaitStatus(){
+    waitStatus = false;
+    notifyListeners();
+  }
+
+  Future<void> onSend(BuildContext context) async{
+    enableWaitStatus();
+    try{
+      await createTicket(TicketModel(
+        title: title!,
+        name: name!,
+        contact: contact!,
+        description: comment!,
+        files: files,
+      ));
+      await showSuccessDialog(context, 'Зявка отправлена');
+      clear();
+    }catch(exception, strc){
+      print(exception);
+      print(strc);
+      await showErrorDialog(context, "Что-то пошло не так");
+    }
+    disableWaitStatus();
   }
 
 

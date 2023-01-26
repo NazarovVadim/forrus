@@ -32,3 +32,29 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
+class WaitButton extends StatelessWidget {
+  const WaitButton({Key? key}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Material(
+        color: StyleLibrary.color.primary,
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          constraints: BoxConstraints(
+              minHeight: 60,
+              minWidth: MediaQuery.of(context).size.width/2),
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Center(child: CircularProgressIndicator(color: Colors.black,)),
+        ),
+      ),
+    );
+  }
+}
+

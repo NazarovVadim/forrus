@@ -39,6 +39,7 @@ class _FormPageState extends State<FormPage> {
             Text("Создание заявки", style: StyleLibrary.font.header),
             StyleLibrary.padding.contentDivider,
             FormFieldWidget(
+              controller: state.titleController,
               label: "Заголовок*",
               isOutlineBorder: false,
               onChange: (value) {
@@ -47,6 +48,7 @@ class _FormPageState extends State<FormPage> {
             ),
             StyleLibrary.padding.contentDivider,
             FormFieldWidget(
+              controller: state.nameController,
               label: "Ваше имя*",
               isOutlineBorder: false,
               onChange: (value) {
@@ -55,6 +57,7 @@ class _FormPageState extends State<FormPage> {
             ),
             StyleLibrary.padding.contentDivider,
             FormFieldWidget(
+              controller: state.contactController,
               label: "Телефон или email*",
               isOutlineBorder: false,
               onChange: (value) {
@@ -64,6 +67,7 @@ class _FormPageState extends State<FormPage> {
             StyleLibrary.padding.contentDivider,
             StyleLibrary.padding.contentDivider,
             FormFieldWidget(
+              controller: state.commentController,
               label: "Комментарий к заявке*",
               lines: 6,
               isOutlineBorder: true,
@@ -76,12 +80,12 @@ class _FormPageState extends State<FormPage> {
                state.onChangeFiles(files);
              },),
               StyleLibrary.padding.contentDivider,
-              CustomButton(
+              (!state.waitStatus) ? CustomButton(
                   title: "Отправить",
                   onTap: (state.notNull())
-                      ? () async => await state.onSend()
+                      ? () async => await state.onSend(context)
                       : null
-              ),
+              ) : WaitButton(),
           ],
           ),
         ),
@@ -100,11 +104,12 @@ class FileFormField extends StatefulWidget {
 
 class _FileFormFieldState extends State<FileFormField> {
 
-  List<PlatformFile> files = [];
 
 
   @override
   Widget build(BuildContext context) {
+
+    List<PlatformFile> contentFiles = context.watch<FormPageProvider>().files;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -116,15 +121,15 @@ class _FileFormFieldState extends State<FileFormField> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: files.length,
+                itemCount: contentFiles.length,
                 itemBuilder: (context, index){
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ImageContainer(file: files[index], onTap: (file){
+                    child: ImageContainer(file: contentFiles[index], onTap: (file){
                      setState(() {
-                       files = deleteFileByName(files, file.name);
+                       contentFiles = deleteFileByName(contentFiles, file.name);
                      });
-                     widget.onChange(files);
+                     widget.onChange(contentFiles);
                     }),
                   );
                 }
@@ -132,9 +137,9 @@ class _FileFormFieldState extends State<FileFormField> {
           ),
           FilePickerWidget(onSave: (files){
             setState(() {
-              this.files.addAll(files);
+              contentFiles.addAll(files);
             });
-            widget.onChange(this.files);
+            widget.onChange(contentFiles);
           },)
         ],
       ),

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:forrus/styles/style_library.dart';
 
 class FormFieldWidget extends StatelessWidget {
-  const FormFieldWidget({Key? key, required this.label, this.lines, required this.isOutlineBorder, required this.onChange}) : super(key: key);
+  const FormFieldWidget({Key? key, required this.label, this.lines, required this.isOutlineBorder,
+    required this.onChange, required this.controller}) : super(key: key);
 
   final String label;
   final int? lines;
   final bool isOutlineBorder;
   final Function(String? value) onChange;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       minLines: lines,
       maxLines: (lines != null) ? 10 : null,
       cursorColor: StyleLibrary.color.primary,
