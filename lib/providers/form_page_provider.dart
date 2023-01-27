@@ -1,16 +1,22 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:forrus/funcs/create_ticket.dart';
+import 'package:forrus/funcs/select_files.dart';
+import 'package:forrus/models/ticket_error.dart';
 import 'package:forrus/models/ticket_model.dart';
+import 'package:forrus/tools/compressor/compressor.dart';
 import 'package:forrus/widgets/dialogs.dart';
+import 'dart:io';
+import 'package:video_compress/video_compress.dart';
 
 class FormPageProvider with ChangeNotifier{
   String? title;
   String? name;
   String? contact;
   String? comment;
-  List<PlatformFile> files = [];
+  List<File> files = [];
   bool waitStatus = false;
+  bool loadStatus = false;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -36,7 +42,7 @@ class FormPageProvider with ChangeNotifier{
     comment = value;
     notifyListeners();
   }
-  void onChangeFiles(List<PlatformFile> value){
+  void onChangeFiles(List<File> value){
     files = value;
     notifyListeners();
   }
@@ -67,6 +73,39 @@ class FormPageProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  void enableLoadStatus(){
+    loadStatus = true;
+    notifyListeners();
+  }
+
+  void disableLoadStatus(){
+    loadStatus = false;
+    notifyListeners();
+  }
+
+  Future<List<File>> onAddFiles(BuildContext context) async{
+    enableLoadStatus();
+    try{
+      var files = await selectFiles();
+      if(!VideoCompress.isCompressing){
+        disableLoadStatus();
+      }
+      return files;
+    }catch(exception, strc){
+      print(strc);
+      print("Ошибка $exception");
+      if(VideoCompress.isCompressing){
+        showErrorDialog(context, "Необходимо дождаться загрузки видео !");
+      }else{
+        disableLoadStatus();
+      }
+      rethrow;
+    }
+
+
+
+  }
+
   Future<void> onSend(BuildContext context) async{
     enableWaitStatus();
     try{
@@ -78,11 +117,15 @@ class FormPageProvider with ChangeNotifier{
         files: files,
       ));
       await showSuccessDialog(context, 'Зявка отправлена');
+      Compressor.clear();
       clear();
     }catch(exception, strc){
-      print(exception);
-      print(strc);
-      await showErrorDialog(context, "Что-то пошло не так");
+      if(exception is TicketError){
+        showErrorDialog(context, exception.toString());
+      }
+      else{
+        await showErrorDialog(context, "Что-то пошло не так");
+      }
     }
     disableWaitStatus();
   }

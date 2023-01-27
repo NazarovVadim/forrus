@@ -3,13 +3,14 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:forrus/tools/compressor/compressor.dart';
 
 class TicketModel{
   String title;
   String name;
   String contact;
   String description;
-  List<PlatformFile>? files;
+  List<File>? files;
 
   TicketModel({
     required this.title,
@@ -18,7 +19,7 @@ class TicketModel{
     required this.description,
     this.files});
 
-  factory TicketModel.fromJson(Map<String, dynamic> json) {
+/*  factory TicketModel.fromJson(Map<String, dynamic> json) {
     return TicketModel(
       title: json["title"],
       name: json["name"],
@@ -28,7 +29,7 @@ class TicketModel{
           .map((i) => PlatformFile.fromMap(i))
           .toList(),
     );
-  }
+  }*/
 
   Map<String, dynamic> toJson()  {
 
@@ -38,7 +39,7 @@ class TicketModel{
       "CONTACT": contact,
       "DESCRIPTION": description,
       "file[]": (files != null) ?  List.of(files!).map((file)  => base64Encode( (File(file.path!).readAsBytesSync()))).toList() : "",
-      "fileName[]": (files != null) ? List.of(files!).map((file) => file.name).toList() : "",
+      "fileName[]": (files != null) ? List.of(files!).map((file) => Compressor.getFileNameFromPath(path: file.path)).toList() : "",
     };
   }
 

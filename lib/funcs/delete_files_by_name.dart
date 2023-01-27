@@ -1,11 +1,14 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+import 'package:forrus/tools/compressor/compressor.dart';
 
-List<PlatformFile> deleteFileByName(List<PlatformFile> files, String name){
+List<File> deleteFileByName(List<File> files, String name){
 
   int? selectFileIndex;
 
   for(int i=0; i<files.length; i++){
-    if(files[i].name == name){
+
+    var checkName = Compressor.getFileNameFromPath(path: files[i].path);
+    if(checkName == name){
       selectFileIndex = i;
       break;
     }

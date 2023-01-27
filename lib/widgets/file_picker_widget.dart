@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:forrus/funcs/select_files.dart';
 import 'package:forrus/styles/style_library.dart';
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
-class FilePickerWidget extends StatelessWidget {
-  const FilePickerWidget({Key? key, required this.onSave}) : super(key: key);
+import 'package:forrus/tools/compressor/compressor.dart';
 
-  final Function(List<PlatformFile> files) onSave;
+class FilePickerWidget extends StatelessWidget {
+  const FilePickerWidget({Key? key, required this.onSave, required this.onTap}) : super(key: key);
+
+  final Function(List<File> files) onSave;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return AddButton(
       onSave: (files){
-        onSave(files.files);
+        onSave(files);
       },
+      onTap: onTap,
     );
   }
 }
 
 class AddButton extends StatelessWidget {
-  const AddButton({Key? key, required this.onSave}) : super(key: key);
+  const AddButton({Key? key, required this.onSave, required this.onTap}) : super(key: key);
 
-  final Function(FilePickerResult files) onSave;
+  final Function(List<File> files) onSave;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class AddButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: StyleLibrary.color.primary,
         child: InkWell(
-          onTap: ()  async => onSave(await selectFiles()),
+          onTap: ()  async => onSave(await onTap()),
           child: Container(
             height: 60,
             width: 60,
@@ -50,12 +53,11 @@ class AddButton extends StatelessWidget {
 class ImageContainer extends StatelessWidget {
   const ImageContainer({Key? key, required this.file, required this.onTap}) : super(key: key);
 
-  final PlatformFile file;
-  final Function(PlatformFile file) onTap;
+  final File file;
+  final Function(File file) onTap;
 
   @override
   Widget build(BuildContext context) {
-    print(file.extension);
     return Stack(
       children: [
         Container(
@@ -64,14 +66,14 @@ class ImageContainer extends StatelessWidget {
           decoration:  BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
-          child:  (file.extension == "jpg" ||
-              file.extension == "jpeg" ||
-              file.extension == "png")
-              ? Image.file(File(file.path!), fit: BoxFit.cover,)
+          child:  (Compressor.getFileFormat(path: file.path) == "jpg" ||
+              Compressor.getFileFormat(path: file.path) == "jpeg" ||
+              Compressor.getFileFormat(path: file.path)== "png")
+              ? Image.file(File(file.path), fit: BoxFit.cover)
               : Column(
             children: [
-              Expanded(child: Icon(Icons.file_copy_outlined, )),
-              Text(file.name, style: StyleLibrary.font.small,)
+              const Expanded(child: Icon(Icons.file_copy_outlined, )),
+              Text(Compressor.getFileNameFromPath(path: file.path), style: StyleLibrary.font.small,)
             ],
           )
         ),
